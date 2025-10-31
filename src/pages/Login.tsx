@@ -8,7 +8,7 @@ export const Login = () => {
     <div>
       <div className="flex flex-row lg:flex-row    items-center justify-center min-h-[93vh]  px-6 gap-56 ">
       <Hero
-        titulo={"Bienvenido"}
+        titulo={"Bienvenidos"}
         subtitulo={"Ingresa y disfruta"}
         mensaje={"Si aun no tienes una cuenta "}
         mensaje2={"puedes"}
