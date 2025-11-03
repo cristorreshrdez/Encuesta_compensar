@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { Login } from "./pages/Login";
 import {Register} from "./pages/Register";
-import { Survey } from "./pages/survey";
+import { Survey } from "./pages/Survey";
+
 
 export const App = () => {
   return (

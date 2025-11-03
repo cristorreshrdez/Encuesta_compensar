@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { imagesSocial } from "../../data/imagesSocial";
 import { InputForm } from "../MainContent/InputForm";
-
+import { imagesSocial } from "../../data/imagesSocial";
 
 
 interface Field {
@@ -16,20 +15,17 @@ title: string;
 fields?: Field[];
 }
 
-export const FormLogin: React.FC<Props> = ({ title, fields = [] }) => {
+export const FormRegister: React.FC<Props> = ({ title, fields = [] }) => {
 const navigate = useNavigate();
 
-  // Estado del formulario
 const [formData, setFormData] = useState<{ [key: string]: string }>({});
 const [error, setError] = useState("");
 const [loading, setLoading] = useState(false);
 
-  // Manejar cambios de los inputs
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 };
 
-  // Enviar datos al backend
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -43,19 +39,22 @@ const handleSubmit = async (e: React.FormEvent) => {
     return;
     }
 
+    // Validar contraseñas
+    if (formData.password !== formData.confirmPassword) {
+    setError("Las contraseñas no coinciden.");
+    setLoading(false);
+    return;
+    }
+
     try {
-      // Petición a la API
-    const response = await loginUser(formData);
+    await registerUser(formData);
 
-
-      // Guardar usuario en localStorage
-    localStorage.setItem("user", JSON.stringify(response.data));
-
-      // Redirigir al formulario de encuesta
-    navigate("/survey");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      navigate("/"); // redirigir al login
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-    setError("Credenciales incorrectas o usuario no encontrado.");
+    setError(
+        "Error al registrar. Verifica los datos e inténtalo nuevamente."
+    );
     } finally {
     setLoading(false);
     }
@@ -65,7 +64,6 @@ return (
     <div className="w-full max-w-sm md:max-w-md flex flex-col gap-4">
     <h2 className="font-semibold text-3xl mb-4">{title}</h2>
 
-      {/* FORMULARIO */}
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {fields.map((field) => (
         <InputForm
@@ -77,32 +75,21 @@ return (
         />
         ))}
 
-        {/* Mensaje de error */}
-        {error && (
-        <p className="text-red-500 text-sm text-center mt-1">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-        {/* Botón de envío */}
         <button
         type="submit"
         disabled={loading}
         className="bg-orange-500 p-2 border border-orange-300 rounded-lg text-white font-bold shadow w-full cursor-pointer hover:bg-orange-600 transition-all"
         >
-        {loading ? "Cargando..." : title}
+        {loading ? "Registrando..." : title}
         </button>
     </form>
 
-      {/* Enlace de olvido de contraseña */}
-    <p className="text-gray-400 text-md mt-1 cursor-pointer hover:underline text-center">
-        Olvidé mi contraseña
-    </p>
-
-      {/* Separador */}
     <p className="text-gray-400 font-semibold text-lg mt-3 text-center">
-        o continúa con
+        o regístrate con
     </p>
 
-      {/* Íconos sociales */}
     <div className="flex gap-5 items-center justify-center mt-2">
         {imagesSocial.map((socialimage) => (
         <img
@@ -117,7 +104,7 @@ return (
 );
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function loginUser(_formData: { [key: string]: string; }) {
+function registerUser(_formData: { [key: string]: string; }) {
     throw new Error("Function not implemented.");
 }
 
