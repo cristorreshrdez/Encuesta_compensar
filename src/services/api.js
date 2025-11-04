@@ -1,17 +1,28 @@
-import axios from "axios";
+// src/services/api.ts
+import axios from 'axios';
 
-// URL base del backend del onboarding
-const API = axios.create({
-baseURL: "https://7wmbjxblzi.execute-api.us-east-1.amazonaws.com",
-headers: {
-    "Content-Type": "application/json",
-},
-});
+const API_URL = 'http://localhost:3000/api'; // Cambia esto por tu URL real
 
-// Rutas disponibles del backend
-export const registerUser = (data) => API.post("/register", data);
-export const loginUser = (data) => API.post("/login", data);
-export const sendSurvey = (data) => API.post("/survey", data);
-export const getUser = (id) => API.get(`/user/${id}`);
+interface LoginData {
+[key: string]: string;
+}
 
-export default API;
+interface LoginResponse {
+data: {
+    id: string;
+    email: string;
+    name: string;
+    token?: string;
+    // Agrega aquí los campos que tu API devuelve
+};
+}
+
+export const loginUser = async (formData: LoginData): Promise<LoginResponse> => {
+try {
+    const response = await axios.post(`${API_URL}/login`, formData);
+    return response.data;
+} catch (error) {
+    console.error('Error en login:', error);
+    throw error;
+}
+};

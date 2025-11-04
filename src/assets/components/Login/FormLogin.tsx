@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { imagesSocial } from "../../data/imagesSocial";
 import { InputForm } from "../MainContent/InputForm";
-
-
+import { loginUser } from "../../services/api"; // ✅ Importar la función real
 
 interface Field {
 name: string;
@@ -47,15 +46,16 @@ const handleSubmit = async (e: React.FormEvent) => {
       // Petición a la API
     const response = await loginUser(formData);
 
-
-      // Guardar usuario en localStorage
+      // Guardar usuario en localStorage (esto funciona en el navegador)
     localStorage.setItem("user", JSON.stringify(response.data));
 
       // Redirigir al formulario de encuesta
     navigate("/survey");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-    setError("Credenciales incorrectas o usuario no encontrado.");
+    } catch (err: any) {
+    setError(
+        err.response?.data?.message || 
+        "Credenciales incorrectas o usuario no encontrado."
+);
     } finally {
     setLoading(false);
     }
@@ -86,7 +86,7 @@ return (
         <button
         type="submit"
         disabled={loading}
-        className="bg-orange-500 p-2 border border-orange-300 rounded-lg text-white font-bold shadow w-full cursor-pointer hover:bg-orange-600 transition-all"
+        className="bg-orange-500 p-2 border border-orange-300 rounded-lg text-white font-bold shadow w-full cursor-pointer hover:bg-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {loading ? "Cargando..." : title}
         </button>
@@ -116,8 +116,3 @@ return (
     </div>
 );
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function loginUser(_formData: { [key: string]: string; }) {
-    throw new Error("Function not implemented.");
-}
-
