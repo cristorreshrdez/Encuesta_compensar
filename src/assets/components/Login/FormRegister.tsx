@@ -31,7 +31,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setError("");
     setLoading(true);
 
-    // Validar que todos los campos estén llenos
+    
     const emptyFields = fields.some((field) => !formData[field.name]);
     if (emptyFields) {
     setError("Por favor completa todos los campos.");
@@ -39,7 +39,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     return;
     }
 
-    // Validar contraseñas
+    
     if (formData.password !== formData.confirmPassword) {
     setError("Las contraseñas no coinciden.");
     setLoading(false);
@@ -49,8 +49,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     try {
     await registerUser(formData);
 
-      navigate("/"); // redirigir al login
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      navigate("/");
+    
     } catch (err) {
     setError(
         "Error al registrar. Verifica los datos e inténtalo nuevamente."
@@ -103,7 +103,6 @@ return (
     </div>
 );
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function registerUser(_formData: { [key: string]: string; }) {
     throw new Error("Function not implemented.");
 }

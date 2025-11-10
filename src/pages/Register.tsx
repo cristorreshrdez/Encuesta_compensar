@@ -99,7 +99,7 @@ export const Register = () => {
           linkText={"Iniciar sesion aqui !"}
           onLinkClick={() => navigate("/")}
         />
-
+      
         <FormLogin
           title={"Registrate"}
           fields={[
